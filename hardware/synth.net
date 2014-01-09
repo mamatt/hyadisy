@@ -1,0 +1,79 @@
+# EESchema Netlist Version 1.1 created  mer. 08 janv. 2014 16:59:00 CET
+(
+ ( /52CD2D25 C1V5 C1 10uF
+  ( 1 N-000008 )
+  ( 2 N-000009 )
+ )
+ ( /52CD2CC7 C1V5 C2 10uF
+  ( 1 GND )
+  ( 2 N-000006 )
+ )
+ ( /52CD2F86 C1V5 C3 10uF
+  ( 1 VDD )
+  ( 2 GND )
+ )
+ ( /52CD2F76 C1V5 C4 10uF
+  ( 1 GND )
+  ( 2 VEE )
+ )
+ ( /52CD3049 C1V8 C5 470uF
+  ( 1 VDD )
+  ( 2 GND )
+ )
+ ( /52CD304C C1V8 C6 470uF
+  ( 1 GND )
+  ( 2 VEE )
+ )
+ ( /52CD63AA DIP-8__300 DC1 TC962
+  ( 1 N-000003 )
+  ( 2 N-000008 )
+  ( 3 GND )
+  ( 4 N-000009 )
+  ( 5 N-000006 )
+  ( 6 ? )
+  ( 7 ? )
+  ( 8 N-000003 )
+ )
+ ( /52CD6767 PIN_ARRAY_2X1 J1 POWER_JACK
+  ( 1 N-000003 )
+  ( 2 GND )
+ )
+ ( /52CD2E61 LM78XX U1 7805
+  ( GND GND )
+  ( VI N-000003 )
+  ( VO VDD )
+ )
+ ( /52CD2E76 LM79XX U2 7905
+  ( GND GND )
+  ( VI N-000006 )
+  ( VO VEE )
+ )
+)
+*
+{ Allowed footprints by component:
+$component C1
+ CP*
+ SM*
+$endlist
+$component C2
+ CP*
+ SM*
+$endlist
+$component C3
+ CP*
+ SM*
+$endlist
+$component C4
+ CP*
+ SM*
+$endlist
+$component C5
+ CP*
+ SM*
+$endlist
+$component C6
+ CP*
+ SM*
+$endlist
+$endfootprintlist
+}

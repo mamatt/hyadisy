@@ -1,0 +1,73 @@
+Cmp-Mod V01 Created by CvPcb (2012-apr-16-27)-stable date = mer. 08 janv. 2014 16:59:00 CET
+
+BeginCmp
+TimeStamp = /52CD2D25;
+Reference = C1;
+ValeurCmp = 10uF;
+IdModule  = C1V5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52CD2CC7;
+Reference = C2;
+ValeurCmp = 10uF;
+IdModule  = C1V5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52CD2F86;
+Reference = C3;
+ValeurCmp = 10uF;
+IdModule  = C1V5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52CD2F76;
+Reference = C4;
+ValeurCmp = 10uF;
+IdModule  = C1V5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52CD3049;
+Reference = C5;
+ValeurCmp = 470uF;
+IdModule  = C1V8;
+EndCmp
+
+BeginCmp
+TimeStamp = /52CD304C;
+Reference = C6;
+ValeurCmp = 470uF;
+IdModule  = C1V8;
+EndCmp
+
+BeginCmp
+TimeStamp = /52CD63AA;
+Reference = DC1;
+ValeurCmp = TC962;
+IdModule  = DIP-8__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /52CD6767;
+Reference = J1;
+ValeurCmp = POWER_JACK;
+IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /52CD2E61;
+Reference = U1;
+ValeurCmp = 7805;
+IdModule  = LM78XX;
+EndCmp
+
+BeginCmp
+TimeStamp = /52CD2E76;
+Reference = U2;
+ValeurCmp = 7905;
+IdModule  = LM79XX;
+EndCmp
+
+EndListe

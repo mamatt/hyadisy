@@ -1,0 +1,29 @@
+eeschema (2012-apr-16-27)-stable  >> Creation date: mer. 08 janv. 2014 17:23:14 CET
+
+#Cmp ( ordre = Référence )
+| C1         10uF        
+| C2         10uF        
+| C3         10uF        
+| C4         10uF        
+| C5         470uF       
+| C6         470uF       
+| DC1        TC962       
+| J1         POWER_JACK  
+| U1         7805        
+| U2         7905        
+#End Cmp
+
+#Cmp ( ordre = Valeur )
+| 10uF         C1        
+| 10uF         C2        
+| 10uF         C3        
+| 10uF         C4        
+| 470uF        C5        
+| 470uF        C6        
+| 7805         U1        
+| 7905         U2        
+| POWER_JACK   J1        
+| TC962        DC1       
+#End Cmp
+
+#End List
