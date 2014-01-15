@@ -22,7 +22,7 @@ Boards, pins and resistor positions are documented in MozziGuts.h
 
 /* Used internally to put the 0-biased generated audio into the right range for PWM output.*/
 // 14 bit
-#define AUDIO_BIAS ((unsigned int) 0x2000)
+#define AUDIO_BIAS ((unsigned int) 0x1800)
 
 
 #endif        //  #ifndef AUDIOCONFIGHISPEED14BITPWM_H

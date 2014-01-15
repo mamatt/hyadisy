@@ -25,7 +25,7 @@
 #include "mozzi_config.h" // at the top of all MozziGuts and analog files
 #include <util/atomic.h>
 //#include "mozzi_utils.h"
-
+#include "SPI.h"
 
 /*
 ATmega328 technical manual, Section 12.7.4:
@@ -71,6 +71,30 @@ static byte pre_mozzi_TCCR2, pre_mozzi_OCR2, pre_mozzi_TIMSK;
 static byte pre_mozzi_TCCR4A, pre_mozzi_TCCR4B, pre_mozzi_TCCR4C, pre_mozzi_TCCR4D, pre_mozzi_TCCR4E, pre_mozzi_OCR4C, pre_mozzi_TIMSK4;
 #endif
 #endif
+
+#define DAC_PIN 7	
+// mamatt DAC add
+void dac_out(unsigned int value) {
+	
+	byte data ;
+	
+	PORTD &= ~(1<<DAC_PIN) ; // Set #CS for DAC low, selecting it
+	
+	data = highByte(value);
+    data = 0b00001111 & data;
+    data = 0b00110000 | data;
+    SPI.transfer(data);
+    data = lowByte(value);
+    SPI.transfer(data);
+    
+	//SPI.transfert(0x30) ; //config
+	//SPI.transfet(value) ; //data
+	
+	PORTD |= (1<<DAC_PIN)  ; // Set #CS for DAC high, deselecting it
+}
+
+
+
 
 static void backupPreMozziTimer1(){
 	// backup pre-mozzi register values for pausing later
@@ -219,7 +243,7 @@ void audioHook() // 2us excluding updateAudio()
 		backupPreMozziTimer1();
 
 		pinMode(AUDIO_CHANNEL_1_PIN, OUTPUT);	// set pin to output for audio
-		Timer1.initialize(1000000UL/AUDIO_RATE, PHASE_FREQ_CORRECT);		// set period, phase and frequency correct
+		Timer1.initialize(1000000UL/AUDIO_RATE, PHASE_FREQ_CORRECT); // set period, phase and frequency correct
 		Timer1.pwm(AUDIO_CHANNEL_1_PIN, AUDIO_BIAS);		// pwm pin, 50% of Mozzi's duty cycle, ie. 0 signal
 		TIMSK1 = _BV(TOIE1); 	// Overflow Interrupt Enable (when not using Timer1.attachInterrupt())
 
@@ -237,7 +261,8 @@ void audioHook() // 2us excluding updateAudio()
 
 #endif
 		output_buffer_tail++;
-		AUDIO_CHANNEL_1_OUTPUT_REGISTER = output_buffer[(unsigned char)output_buffer_tail & (unsigned char)(BUFFER_NUM_CELLS-1)]; // 1us, 2.5us with longs
+		dac_out( output_buffer[(unsigned char)output_buffer_tail & (unsigned char)(BUFFER_NUM_CELLS-1)] ) ;
+		//AUDIO_CHANNEL_1_OUTPUT_REGISTER = output_buffer[(unsigned char)output_buffer_tail & (unsigned char)(BUFFER_NUM_CELLS-1)]; // 1us, 2.5us with longs
 	}
 
 	// end STANDARD
@@ -338,8 +363,36 @@ void audioHook() // 2us excluding updateAudio()
 		// sketches at http://wiki.openmusiclabs.com/wiki/PWMDAC,  http://wiki.openmusiclabs.com/wiki/MiniArDSP
 
 		// 14 bit - this sounds better than 12 bit, it's cleaner, less bitty, don't notice aliasing
-		AUDIO_CHANNEL_1_HIGHBYTE_REGISTER = out >> 7; // B11111110000000 becomes B1111111
-		AUDIO_CHANNEL_1_LOWBYTE_REGISTER = out & 127; // B001111111
+		//AUDIO_CHANNEL_1_HIGHBYTE_REGISTER = out >> 7; // B11111110000000 becomes B1111111
+		//AUDIO_CHANNEL_1_LOWBYTE_REGISTER = out & 127; // B001111111
+	
+	uint8_t dacSPI0;                // the two bytes that go to the DAC over SPI
+    uint8_t dacSPI1;
+	
+	dacSPI1 = lowByte(out); // B11111110000000 becomes B1111111
+    dacSPI0 = highByte(out) ; // B001111111
+
+    //DAC TEST
+    //sample = 2033;
+
+
+
+    //dacSPI0 = out >> 8;
+    //dacSPI0 >>= 4;
+    //dacSPI0 |= 0x30; // Write to DAC-A, unbuffered VREF, gain=1x, Output Power Down Control bit (low impedence out?),
+    dacSPI0 |= 0x30;  //buffered VRef
+    //dacSPI1 = out >> 4;
+
+    // transmit value out the SPI port
+    PORTD &= ~(1<<DAC_PIN) ; // Set #CS for DAC low, selecting it
+    
+    SPDR = dacSPI0;  //The SPI Data Register - Writing to the register initiates data transmission.
+    while (!(SPSR & (1<<SPIF))); //Wait for data to be sent over SPI, flag raised
+    SPDR = dacSPI1;
+    while (!(SPSR & (1<<SPIF)));
+
+	PORTD |= (1<<DAC_PIN)  ; // Set #CS for DAC high, deselecting it	
+		//dac_out( output_buffer[(unsigned char)output_buffer_tail & (unsigned char)(BUFFER_NUM_CELLS-1)] ) ;
 
 	}
 
