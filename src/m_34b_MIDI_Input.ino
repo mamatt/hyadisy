@@ -23,37 +23,43 @@
 
 #include <MIDI.h>
 #include <MozziGuts.h>
-#include <Oscil.h> // oscillator template
-#include <Line.h> // for envelope
-#include <tables/saw2048_int8.h> // sine table for oscillator
-#include <tables/sin2048_int8.h>
+//#include <Oscil.h> // oscillator template
+#include "OscilM.h" // version perso
+//#include <Line.h> // for envelope
+#include "triangle4096_int8M.h"
+//#include <tables/triangle2048_int8.h>
+//#include "tri.h"
+#include "saw4096_int8M.h"
+//#include <tables/saw4096_int8.h>
 #include <mozzi_midi.h>
-#include <ADSR.h>
-#include <mozzi_fixmath.h>
-#include <mozzi_analog.h>
+//#include <ADSR.h>
+//#include <mozzi_fixmath.h>
+//#include <mozzi_analog.h>
 #include <SPI.h>
-#include <McpDigitalPot.h>
+//#include <McpDigitalPot.h>
 
 // use #define for CONTROL_RATE, not a constant
 #define CONTROL_RATE 128 // powers of 2 please
 
 // audio sinewave oscillator
-Oscil <SAW2048_NUM_CELLS, AUDIO_RATE> aTri0 (SAW2048_DATA);
-Oscil <SIN2048_NUM_CELLS, AUDIO_RATE> aSin0(SIN2048_DATA);
+Oscil <SAW4096_NUM_CELLS, AUDIO_RATE>      OSC1(SAW4096_DATA);
+Oscil <TRIANGLE4096_NUM_CELLS, AUDIO_RATE> OSC2(TRIANGLE4096_DATA);
 
 // envelope generator
-ADSR <CONTROL_RATE> envelope;
+//ADSR <CONTROL_RATE> envelope;
 
-//#define AUDIO_MODE HIFI
 
-#define LED 13
+//#define CUTOFF_PIN 3
+#define RESO_PIN 6
+#define DAC_PIN 7
 
-#define CUTOFF_CV 3
+byte gainOSC1 =128 ;
+byte gainOSC2 =128 ;
 
-byte gainS ;
-byte gainT ;
+//int TestSample=0 ;
+//int PhaseACC=0 ;
 
-byte cutOFF ;
+//byte cutOFF ;
 
 byte Reso ;
 
@@ -62,115 +68,110 @@ byte Reso ;
 // #define SPI_MOSI             11 //arduino   <->   SPI Master Out Slave In   -> SDI (Pin 03 on McpDigitalPot DIP)
 // #define SPI_MISO             12 //arduino   <->   SPI Master In Slave Out   -> SDO (Pin 13 on McpDigitalPot DIP)
 
-// Then choose any other free pin as the Slave Select (pin 10 if the default but doesnt have to be)
-#define MCP_DIGITAL_POT_SLAVE_SELECT_PIN 8 //arduino   <->   Chip Select               -> CS  (Pin 01 on McpDigitalPot DIP)
-
-// Its recommended to measure the rated end-end resistance (terminal A to terminal B)
-// Because this can vary by a large margin, up to -+ 20%. And temperature variations.
-float rAB_ohms = 10000.00; // 10k Ohm
-
-// Instantiate McpDigitalPot object, with default rW (=117.5 ohm, its typical resistance)
-McpDigitalPot digitalPot = McpDigitalPot( MCP_DIGITAL_POT_SLAVE_SELECT_PIN, rAB_ohms );
 
 void HandleNoteOn(byte channel, byte note, byte velocity) { 
-  if(velocity == 0){
+ /* if(velocity == 0){
     // some midi controllers send velocity 0 instead of note-off
     envelope.noteOff();
     //digitalWrite(LED,LOW);
   }  
-  else{
-    //aSig.setFreq(mtof(note)); // simple but less accurate frequency
-    aTri0.setFreq_Q16n16(Q16n16_mtof(Q8n0_to_Q16n16(note))); // accurate frequency
-    aSin0.setFreq_Q16n16(Q16n16_mtof(Q8n0_to_Q16n16(note-8))); // accurate frequency
-    envelope.noteOn();
-    //digitalWrite(LED,HIGH);
-  }
+  else {
+   */ //aSig.setFreq(mtof(note)); // simple but less accurate frequency
+    OSC1.setFreq_Q16n16(Q16n16_mtof(Q8n0_to_Q16n16(note))); // accurate frequency
+    OSC2.setFreq_Q16n16(Q16n16_mtof(Q8n0_to_Q16n16(note))); // accurate frequency
+   /* envelope.noteOn();
+  }*/
 }
-
 
 void HandleNoteOff(byte channel, byte note, byte velocity) { 
-  envelope.noteOff();
-  //digitalWrite(LED,LOW);
+  //envelope.noteOff();
 }
 
-
 void setup() {
-  //pinMode(LED, OUTPUT);
-//Serial.begin(115200);  
-  pinMode(CUTOFF_CV,OUTPUT);
+	
+  pinMode(RESO_PIN,OUTPUT);
+  pinMode(DAC_PIN,OUTPUT) ;
   
   //SPI Setup
   SPI.begin(); 
+  SPI.setBitOrder(MSBFIRST);
   
-  // First measure the the wiper resistance, called rW
-  digitalPot.setPosition(0, 0); // rAW = rW_ohms
-  //digitalPot.setPosition(1, 0); // rAW = rW_ohms
   
-  digitalPot.scale = 255;
-  
-  MIDI.begin(MIDI_CHANNEL_OMNI);    
-  Serial.begin(115200);  
+  //MIDI.begin(MIDI_CHANNEL_OMNI);    
+  //Serial.begin(115200);  
 
   // Connect the HandleNoteOn function to the library, so it is called upon reception of a NoteOn.
-  MIDI.setHandleNoteOn(HandleNoteOn);    // Put only the name of the function
-  MIDI.setHandleNoteOff(HandleNoteOff);  // Put only the name of the function
+  //MIDI.setHandleNoteOn(HandleNoteOn);    // Put only the name of the function
+  //MIDI.setHandleNoteOff(HandleNoteOff);  // Put only the name of the function
 
-  envelope.setADLevels(255,64);
-  envelope.setTimes(50,200,10000,200); // 10000 is so the note will sustain 10 seconds unless a noteOff comes
+  //MIDI.setHandleControleChange(HandleCC) ;
 
-  aSin0.setFreq(440); // default frequency
-  aTri0.setFreq(440);
-  
-  //adcEnableInterrupt(); // enables the ADC interrupt which gets triggered by adcReadAllChannels()
-  
+ // envelope.setADLevels(255,64);
+ // envelope.setTimes(50,200,1000,200); // 10000 is so the note will sustain 1 seconds unless a noteOff comes
+
+  OSC1.setFreq(440); // default frequency
+  OSC2.setFreq(440);
+    
   startMozzi(CONTROL_RATE); 
 }
 
-
 void updateControl(){
-  gainS = mozziAnalogRead(A0)>>2; // 0 to 255
-  gainT = mozziAnalogRead(A1)>>2; // 0 to 255
-  
-  cutOFF = mozziAnalogRead(A2)>>2; // 0 to 255
+  //gainOSC1 = mozziAnalogRead(A0) >> 2; // 0 to 255
+ 
+  //gainOSC2 = 255 - gainOSC1 ;
+ 
+  //Reso = mozziAnalogRead(A2)>>2; // 0 to 255
 
-  Reso = mozziAnalogRead(A3) >> 2 ; // O to 255
+  
+  //MIDI.read();
 
-  MIDI.read();
-  envelope.update();
+  //envelope.update();
   
-  updateReso(Reso) ;
-  
+  //updateReso(Reso) ;
 }
 
-void updateReso(byte counter) {
-	 digitalPot.setResistance(0, counter);
+void updateReso(byte val) {
+	
+	byte cmd=0; // cmd est la commande que l'on va envoyer
+	//cmd = pot<<12; // 000x 0000 0000 0000 cf figure 7-2
+	//val = val&255; // ainsi val <= 255
+	//cmd |= val; 
+	
+	PORTD &= ~(1<<RESO_PIN) ; // Set #CS for DAC low, selecting it
+	
+	SPDR = cmd;  //The SPI Data Register - Writing to the register initiates data transmission.
+    while (!(SPSR & (1<<SPIF)));
+    SPDR = val ;
+    while (!(SPSR & (1<<SPIF)));
+    
+    PORTD |= (1<<RESO_PIN)  ; // Set #CS for DAC high, deselecting it
 }
-
-
 
 void updateCV_Cutoff(byte cutOFF_value) {
 	static byte cv_count ;
 // PORTD maps to Arduino digital pins 0 to 7
 // http://playground.arduino.cc/Learning/PortManipulation
-  (cv_count++ >= cutOFF_value) ? PORTD &= ~(1 << CUTOFF_CV) : PORTD |= (1 << CUTOFF_CV);
+  //(cv_count++ >= cutOFF_value) ? PORTD &= ~(1 << CUTOFF_PIN) : PORTD |= (1 << CUTOFF_PIN);
   //(green_count++ >= g) ? PORTD &= ~(1 << GREEN_PIN) : PORTD |= (1 << GREEN_PIN);
   //(blue_count++ >= b) ? PORTD &= ~(1 << BLUE_PIN) : PORTD |= (1 << BLUE_PIN);
 } ;
 
 int updateAudio(){
-  
-  updateCV_Cutoff(cutOFF) ;
-  
-  int tri = aTri0.next() * (gainT -1) >> 8 ;
-  int sin = aSin0.next() * (gainS -1) >> 8 ;
-  
-  return (int) (sin + tri) << 5 ;
-}
 
+  //long OSC1Value = (((( (long)OSC1.next() / 8 + 128 )  * gainOSC1 ) >> 4 ) - 2048 );
+  int Value = ( ( (long)OSC1.next() * gainOSC1 ) + ( (long)OSC2.next() * gainOSC2 ) ) >> 9 ;
+  //int OSC2Value =  >> 8;
+  
+  //Serial.print(OSC1Value) ;
+  
+  
+   return Value ;
+  
+}
 
 void loop() {
   audioHook(); // required here
-} 
+}  
 
 
 

@@ -53,8 +53,8 @@ either \#define AUDIO_RATE 16384 or \#define AUDIO_RATE 32768.
 http://blog.makezine.com/2008/05/29/makeit-protodac-shield-fo/ .
 Mozzi-users list has a thread on this.
 */
-#define AUDIO_RATE 16384
-//#define AUDIO_RATE 32768
+//#define AUDIO_RATE 16384
+#define AUDIO_RATE 32768
 
 
 /** @ingroup core
