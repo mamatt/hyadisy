@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mer. 08 janv. 2014 18:39:42 CET
+EESchema Schematic File Version 2  date mer. 29 janv. 2014 17:53:26 CET
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -38,7 +38,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "8 jan 2014"
+Date "29 jan 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -46,113 +46,122 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-NoConn ~ 5650 4800
-NoConn ~ 8450 3550
-NoConn ~ 7200 3950
+$Comp
+L LM13700 U3
+U 1 1 52E9317F
+P 5050 5050
+F 0 "U3" H 5160 5180 60  0000 C CNN
+F 1 "LM13700" H 4830 4840 60  0000 C CNN
+	1    5050 5050
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	7250 4150 7200 4150
+	7250 3950 7250 3850
 Wire Wire Line
-	7200 4150 7200 4050
+	7250 3850 7200 3850
+Wire Wire Line
+	3300 4300 7000 4300
+Wire Wire Line
+	7000 4300 7000 3750
+Wire Wire Line
+	7000 3750 7250 3750
+Wire Wire Line
+	7250 3550 7250 3150
+Wire Wire Line
+	7250 3150 8700 3150
+Wire Wire Line
+	8700 3150 8700 3950
+Wire Wire Line
+	8700 3950 8450 3950
+Wire Wire Line
+	8800 4300 8800 3750
 Wire Bus Line
-	7100 4150 7100 3400
-Wire Bus Line
-	7100 3400 3400 3400
+	3400 3650 3400 3400
 Wire Wire Line
-	7350 2950 7350 3150
-Connection ~ 7350 3150
-Connection ~ 8800 4150
+	4250 3600 4000 3600
 Wire Wire Line
-	8450 4150 8800 4150
+	4000 3600 4000 3850
 Wire Wire Line
-	8450 3750 8800 3750
-Wire Wire Line
-	4250 4200 4000 4200
-Wire Wire Line
-	4000 4200 4000 3950
-Wire Wire Line
-	4000 3950 3300 3950
-Wire Wire Line
-	1400 3250 1400 3550
-Wire Wire Line
-	1100 5550 1100 5450
-Wire Wire Line
-	3650 1050 4500 1050
-Wire Wire Line
-	4500 1850 3650 1850
-Connection ~ 4100 1450
-Wire Wire Line
-	3250 1450 4500 1450
-Connection ~ 3750 1050
-Connection ~ 4100 1850
-Connection ~ 3750 1850
-Wire Wire Line
-	3650 1850 3650 1800
-Wire Wire Line
-	3250 1500 3250 1350
-Wire Wire Line
-	1550 800  1550 750 
-Wire Wire Line
-	1550 750  1500 750 
-Wire Wire Line
-	1600 1700 1600 1550
-Wire Wire Line
-	1600 1550 1650 1550
-Wire Wire Line
-	2850 2200 2850 2350
-Wire Wire Line
-	1100 1800 1650 1800
-Wire Wire Line
-	4500 1050 4500 1000
-Wire Wire Line
-	1650 1300 1100 1300
-Wire Wire Line
-	1100 1300 1100 1400
-Wire Wire Line
-	1650 1050 1650 750 
-Wire Wire Line
-	1650 750  2850 750 
-Wire Wire Line
-	2850 750  2850 1050
-Wire Wire Line
-	1500 1000 1650 1000
-Connection ~ 1650 1000
-Connection ~ 3250 1450
-Connection ~ 4100 1050
-Connection ~ 3750 1450
-Wire Wire Line
-	4500 1450 4500 1550
-Wire Wire Line
-	1400 5550 1400 5450
+	4000 3850 3300 3850
 Wire Wire Line
 	1400 5450 1100 5450
 Wire Wire Line
-	3300 3850 4000 3850
+	1400 5450 1400 5550
 Wire Wire Line
-	4000 3850 4000 3600
+	4500 1550 4500 1450
+Connection ~ 3750 1450
+Connection ~ 4100 1050
+Connection ~ 3250 1450
+Connection ~ 1650 1000
 Wire Wire Line
-	4000 3600 4250 3600
+	1500 1000 1650 1000
+Wire Wire Line
+	2850 1050 2850 750 
+Wire Wire Line
+	2850 750  1650 750 
+Wire Wire Line
+	1650 750  1650 1050
+Wire Wire Line
+	1100 1400 1100 1300
+Wire Wire Line
+	1100 1300 1650 1300
+Wire Wire Line
+	4500 1000 4500 1050
+Wire Wire Line
+	1100 1800 1650 1800
+Wire Wire Line
+	2850 2200 2850 2350
+Wire Wire Line
+	1650 1550 1600 1550
+Wire Wire Line
+	1600 1550 1600 1700
+Wire Wire Line
+	1500 750  1550 750 
+Wire Wire Line
+	1550 750  1550 800 
+Wire Wire Line
+	3250 1500 3250 1350
+Wire Wire Line
+	3650 1800 3650 1850
+Connection ~ 3750 1850
+Connection ~ 4100 1850
+Connection ~ 3750 1050
+Wire Wire Line
+	4500 1450 3250 1450
+Connection ~ 4100 1450
+Wire Wire Line
+	3650 1850 4500 1850
+Wire Wire Line
+	4500 1050 3650 1050
+Wire Wire Line
+	1100 5450 1100 5550
+Wire Wire Line
+	1400 3250 1400 3550
+Wire Wire Line
+	3300 3950 4000 3950
+Wire Wire Line
+	4000 3950 4000 4200
+Wire Wire Line
+	4000 4200 4250 4200
+Wire Wire Line
+	8800 3750 8450 3750
+Wire Wire Line
+	8450 4150 8800 4150
+Connection ~ 8800 4150
+Connection ~ 7350 3150
+Wire Wire Line
+	7350 2950 7350 3150
 Wire Bus Line
-	3400 3400 3400 3650
+	3400 3400 7100 3400
+Wire Bus Line
+	7100 3400 7100 4150
 Wire Wire Line
-	8800 3750 8800 4300
+	7200 4050 7200 4150
 Wire Wire Line
-	8450 3950 8700 3950
-Wire Wire Line
-	8700 3950 8700 3150
-Wire Wire Line
-	8700 3150 7250 3150
-Wire Wire Line
-	7250 3150 7250 3550
-Wire Wire Line
-	7250 3750 7000 3750
-Wire Wire Line
-	7000 3750 7000 4300
-Wire Wire Line
-	7000 4300 3300 4300
-Wire Wire Line
-	7200 3850 7250 3850
-Wire Wire Line
-	7250 3850 7250 3950
+	7200 4150 7250 4150
+NoConn ~ 5650 4800
+NoConn ~ 8450 3550
+NoConn ~ 7200 3950
 Entry Wire Line
 	7100 4050 7200 3950
 Entry Wire Line
